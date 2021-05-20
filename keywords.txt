@@ -1,0 +1,24 @@
+#######################################
+# Syntax Coloring DFRobot_Trafficlight
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+DFRobot_Trafficlight_I2C            KEYWORD1
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+getNowTime	KEYWORD2
+updateModuleTime	KEYWORD2
+setBeginTime	KEYWORD2
+clearSchedule	KEYWORD2
+setRYGLightTime	KEYWORD2
+sendMessageToMCU	KEYWORD2
+getWhitchLightIsOn	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
