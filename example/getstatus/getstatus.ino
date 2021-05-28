@@ -27,35 +27,19 @@ void setup() {
     Serial.println("i2c begin fail,please chack connect!");
     delay(1000);
   }
-  Serial.println("i2c begin success");  
+  Serial.println("i2c begin success");
 
 /*!
- *  @brief 设置从0时0分20开始，持续亮红灯
+ *  @brief 修改交通灯默认持续值
+ */
+  TRAFFICLIGHT.changeDefaultRYGTime(/*红灯持续时间*/ 11, /*黄灯持续时间*/ 3, /*绿灯持续时间*/ 11);
+
+  /*!
+ *  @brief 设置从0时1分0开始，持续亮红灯
  */
   TRAFFICLIGHT.clearSchedule();
-  TRAFFICLIGHT.setBeginTime(/*时*/0,/*分*/0,/*秒*/20);
-  TRAFFICLIGHT.setRYGLightTime(/*红灯持续时间*/1,/*黄灯持续时间*/0,/*绿灯持续时间*/0);
-  TRAFFICLIGHT.sendMessageToMCU();
-
-/*!
- *  @brief 设置从0时0分40开始，持续亮黄灯
- */  
-  TRAFFICLIGHT.setBeginTime(/*时*/0,/*分*/0,/*秒*/40);
-  TRAFFICLIGHT.setRYGLightTime(/*红灯持续时间*/0,/*黄灯持续时间*/1,/*绿灯持续时间*/0);
-  TRAFFICLIGHT.sendMessageToMCU(); 
-
-/*!
- *  @brief 设置从1时0分0开始，持续亮绿灯
- */  
   TRAFFICLIGHT.setBeginTime(/*时*/0,/*分*/1,/*秒*/0);
-  TRAFFICLIGHT.setRYGLightTime(/*红灯持续时间*/0,/*黄灯持续时间*/0,/*绿灯持续时间*/1);
-  TRAFFICLIGHT.sendMessageToMCU();
-
-/*!
- *  @brief 设置从0时1分20开始，红灯亮6秒，黄灯亮5秒，绿灯亮4秒
- */  
-  TRAFFICLIGHT.setBeginTime(/*时*/0,/*分*/1,/*秒*/20);
-  TRAFFICLIGHT.setRYGLightTime(/*红灯持续时间*/6,/*黄灯持续时间*/5,/*绿灯持续时间*/4);
+  TRAFFICLIGHT.setRYGLightTime(/*红灯持续时间*/ LIGHT_INFINITY_TIME, /*黄灯持续时间*/ 0, /*绿灯持续时间*/ 0);
   TRAFFICLIGHT.sendMessageToMCU();
   
 /*!
@@ -65,10 +49,11 @@ void setup() {
 }
 
 void loop() {
-  if(active_light != TRAFFICLIGHT.getWhitchLightIsOn())
+  if (true == TRAFFICLIGHT.IfLightIsOn(RED_LIGHT))
   {
-    active_light = TRAFFICLIGHT.getWhitchLightIsOn();
-    Serial.println(active_light);
+    Serial.println("light is on!");
+  }else{
+    Serial.println("light is off!");
   }
   delay(1000);
 }

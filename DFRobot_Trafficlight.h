@@ -34,6 +34,12 @@
 #define LIGHT_GET_NOW_TIME            0x03
 #define LIGHT_CLEAR_SCHEDULE          0x04
 #define LIGHT_GET_WHITCH_LIGHT_IS_ON  0x05
+#define LIGHT_CHANGE_DEFAULT_LIGHT    0x06
+#define LIGHT_INFINITY_TIME 0xff
+
+#define RED_LIGHT 0X00
+#define YELLOW_LIGHT 0X01
+#define GREEN_LIGHT 0X02
 
 typedef struct
 {
@@ -106,7 +112,17 @@ class DFRobot_TRAFFICLIGHT
  *  @param NULL
  *  @return 哪个灯此时处于亮的状态
  */
-    String getWhitchLightIsOn();
+    bool IfLightIsOn(uint8_t light);
+
+    /*!
+ *  @brief 修改8S默认的红黄绿三色灯的持续时间
+ *  @param  R_time:红灯持续时间
+ *         Y_time:黄灯持续时间
+ *         G_time:绿灯持续时间
+ *  @return NULL
+ */
+    void changeDefaultRYGTime(uint8_t R_time, uint8_t Y_time, uint8_t G_time);
+
   protected: 
     sProtocol_t pack(uint8_t *pBuf, uint8_t len);
 /*!

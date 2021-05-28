@@ -54,9 +54,30 @@ void DFRobot_TRAFFICLIGHT::setBeginTime(uint8_t begin_hour, uint8_t begin_minute
 
 void DFRobot_TRAFFICLIGHT::setRYGLightTime(uint8_t R_time, uint8_t Y_time, uint8_t G_time)
 {
-  this->_R_time = R_time;
-  this->_Y_time = Y_time;
-  this->_G_time = G_time;
+  if(R_time == LIGHT_INFINITY_TIME)
+  {
+    this->_R_time = 1;
+    this->_Y_time = 0;
+    this->_G_time = 0;
+    return;
+  }else if (Y_time == LIGHT_INFINITY_TIME)
+  {
+    this->_R_time = 0;
+    this->_Y_time = 1;
+    this->_G_time = 0;
+    return;
+  }else if (G_time == LIGHT_INFINITY_TIME)
+  {
+    this->_R_time = 0;
+    this->_Y_time = 0;
+    this->_G_time = 1;
+    return;
+  }else{
+    this->_R_time = R_time;
+    this->_Y_time = Y_time;
+    this->_G_time = G_time;
+  }
+
 }
 
 void DFRobot_TRAFFICLIGHT::sendMessageToMCU()
@@ -76,6 +97,22 @@ void DFRobot_TRAFFICLIGHT::sendMessageToMCU()
   delay(500);
 }
 
+void DFRobot_TRAFFICLIGHT::changeDefaultRYGTime(uint8_t R_time, uint8_t Y_time, uint8_t G_time)
+{
+  uint8_t buf[10] = {0};
+  buf[0] = LIGHT_CHANGE_DEFAULT_LIGHT;
+  buf[1] = R_time;
+  buf[2] = Y_time;
+  buf[3] = G_time;
+  sProtocol_t _protocol = pack(buf, sizeof(buf));
+  writeReg(0x00, (uint8_t *)&_protocol, sizeof(_protocol));
+  uint8_t rbuf[12];
+  readReg(0x00, rbuf, sizeof(rbuf));
+  // for(int i =0;i<12;i++)
+  //   DBG(rbuf[i]);
+  delay(500);
+}
+
 void DFRobot_TRAFFICLIGHT::clearSchedule()
 {
   uint8_t buf[10] = {0};
@@ -87,7 +124,7 @@ void DFRobot_TRAFFICLIGHT::clearSchedule()
   delay(500);
 }
 
-String DFRobot_TRAFFICLIGHT::getWhitchLightIsOn()
+bool DFRobot_TRAFFICLIGHT::IfLightIsOn(uint8_t light)
 {
   String activelight;
   uint8_t buf[10] = {0};
@@ -96,22 +133,10 @@ String DFRobot_TRAFFICLIGHT::getWhitchLightIsOn()
   writeReg(0x00, (uint8_t *)&_protocol, sizeof(_protocol));
   uint8_t rbuf[12];
   readReg(0x00, rbuf, sizeof(rbuf));
-  switch(rbuf[2])
-  {
-    case 0:
-      activelight = "red_light";
-      break;
-    case 1:
-      activelight = "yellow_light";
-      break;
-    case 2:
-      activelight = "green_light";
-      break;
-    default:
-      break;
-  }
-  delay(500);
-  return activelight;
+  if (light == rbuf[2])
+    return 1;
+  else 
+    return 0;
 }
 
 //IIC底层通信
