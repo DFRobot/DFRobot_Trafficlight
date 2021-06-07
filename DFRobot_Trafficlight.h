@@ -79,7 +79,7 @@ class DFRobot_TRAFFICLIGHT
     void updateModuleTime(uint8_t hour,uint8_t minute,uint8_t second);
 
 /*!
- *  @brief 更新MCU的时间
+ *  @brief 设置交通灯状态改变的起始时间
  *  @param hour,minute,second
  *  @return 没有返回值
  */
@@ -112,7 +112,7 @@ class DFRobot_TRAFFICLIGHT
  *  @param NULL
  *  @return 哪个灯此时处于亮的状态
  */
-    bool IfLightIsOn(uint8_t light);
+    bool ifLightIsOn(uint8_t light);
 
     /*!
  *  @brief 修改8S默认的红黄绿三色灯的持续时间

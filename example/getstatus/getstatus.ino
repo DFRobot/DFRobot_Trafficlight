@@ -49,7 +49,7 @@ void setup() {
 }
 
 void loop() {
-  if (true == TRAFFICLIGHT.IfLightIsOn(RED_LIGHT))
+  if (true == TRAFFICLIGHT.ifLightIsOn(RED_LIGHT))
   {
     Serial.println("light is on!");
   }else{

@@ -124,7 +124,7 @@ void DFRobot_TRAFFICLIGHT::clearSchedule()
   delay(500);
 }
 
-bool DFRobot_TRAFFICLIGHT::IfLightIsOn(uint8_t light)
+bool DFRobot_TRAFFICLIGHT::ifLightIsOn(uint8_t light)
 {
   String activelight;
   uint8_t buf[10] = {0};
