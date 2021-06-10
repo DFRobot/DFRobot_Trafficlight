@@ -31,11 +31,15 @@ void setup() {
 
 /*!
  *  @brief 修改交通灯默认持续值
+ *  @param 范围：1~99
+ *         单位：秒
  */
   TRAFFICLIGHT.changeDefaultRYGTime(/*红灯持续时间*/ 11, /*黄灯持续时间*/ 3, /*绿灯持续时间*/ 11);
 
-  /*!
+/*!
  *  @brief 设置从0时1分0开始，持续亮红灯
+ *  @param 范围：1~99
+ *         单位：秒
  */
   TRAFFICLIGHT.clearSchedule();
   TRAFFICLIGHT.setBeginTime(/*时*/0,/*分*/1,/*秒*/0);
@@ -44,11 +48,16 @@ void setup() {
   
 /*!
  *  @brief 更新MCU时间
- */  
-  TRAFFICLIGHT.updateModuleTime(0,0,0);
+ */
+  TRAFFICLIGHT.updateModuleTime(/*时*/ 0, /*分*/ 0, /*秒*/ 0);
 }
 
 void loop() {
+/*!
+ *  @param RED_LIGHT    
+ *         YELLOW_LIGHT 
+ *         GREEN_LIGHT 
+ */
   if (true == TRAFFICLIGHT.ifLightIsOn(RED_LIGHT))
   {
     Serial.println("light is on!");

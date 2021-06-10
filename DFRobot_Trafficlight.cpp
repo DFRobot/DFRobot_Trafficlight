@@ -1,48 +1,24 @@
-/*!
-  * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
-  * @licence     The MIT License (MIT)
-  * @author      PengKaixing(kaixing.peng@dfrobot.com)
-  * @version     V0.1
-  * @date        2021-05-17
-  * @get         from https://www.dfrobot.com
-  * @url         https://github.com/dfrobot/DFRobot_Trafficlight
-  */
 #include "DFRobot_Trafficlight.h"
 
 void DFRobot_TRAFFICLIGHT::getNowTime()
 {
-  uint8_t buf[10] = {0};
-  uint8_t rbuf[12] = {0};
-  buf[0] = LIGHT_GET_NOW_TIME;
-  sProtocol_t _protocol = pack(buf, sizeof(buf));
-  writeReg(0x00, (uint8_t *)&_protocol, sizeof(_protocol));
-  readReg(0x00, rbuf, sizeof(rbuf));
-  _NowTime.hour = rbuf[2];
-  _NowTime.minute = rbuf[3];
-  _NowTime.second = rbuf[4];
-}
-
-sProtocol_t DFRobot_TRAFFICLIGHT::pack(uint8_t *pBuf, uint8_t len)
-{
-  sProtocol_t _protocol;
-  _protocol.head = 0xff;
-  _protocol.tail = 0xee;
-  memcpy(_protocol.data, pBuf, len);
-  return _protocol;
+  uint8_t rbuf[3] = {0};
+  readReg(0x0E, rbuf, sizeof(rbuf));
+  _NowTime.hour = rbuf[0];
+  _NowTime.minute = rbuf[1];
+  _NowTime.second = rbuf[2];
 }
 
 void DFRobot_TRAFFICLIGHT::updateModuleTime(uint8_t hour, uint8_t minute, uint8_t second)
 {
-  uint8_t buf[10]={0};
-  buf[0] = LIGHT_UPDATE_MODULE_TIME;
-  buf[1] = hour;
-  buf[2] = minute;
-  buf[3] = second;
-  sProtocol_t _protocol = pack(buf,sizeof(buf));
-  writeReg(0x00, (uint8_t* )&_protocol, sizeof(_protocol));
-  uint8_t rbuf[12];
-  readReg(0x00, rbuf, sizeof(rbuf));
-  delay(500);
+  uint8_t mark = 1;
+  uint8_t buf[3]={0};
+  writeReg(0x09, &mark, 1);
+  delay(100);
+  buf[0] = hour;
+  buf[1] = minute;
+  buf[2] = second;
+  writeReg(0x06, buf, sizeof(buf));
 }
 
 void DFRobot_TRAFFICLIGHT::setBeginTime(uint8_t begin_hour, uint8_t begin_minute, uint8_t begin_second)
@@ -77,63 +53,49 @@ void DFRobot_TRAFFICLIGHT::setRYGLightTime(uint8_t R_time, uint8_t Y_time, uint8
     this->_Y_time = Y_time;
     this->_G_time = G_time;
   }
-
 }
 
 void DFRobot_TRAFFICLIGHT::sendMessageToMCU()
 {
-  uint8_t buf[10] = {0};
-  buf[0] = LIGHT_SEND_MESSAGE_TO_MCU;
-  buf[1] = this->_begin_hour;
-  buf[2] = this->_begin_minute;
-  buf[3] = this->_begin_second;
-  buf[7] = this->_R_time;
-  buf[8] = this->_Y_time;
-  buf[9] = this->_G_time;
-  sProtocol_t _protocol = pack(buf, sizeof(buf));
-  writeReg(0x00, (uint8_t *)&_protocol, sizeof(_protocol));
-  uint8_t rbuf[12];
-  readReg(0x00, rbuf, sizeof(rbuf));
-  delay(500);
+  uint8_t mark = 1;
+  writeReg(0x0A, &mark, 1);
+  delay(100);
+  uint8_t time_buf[3] = {0};
+  uint8_t ryg_buf[3] = {0};
+  time_buf[0] = this->_begin_hour;
+  time_buf[1] = this->_begin_minute;
+  time_buf[2] = this->_begin_second;
+  writeReg(0x17, time_buf, sizeof(time_buf));
+  delay(100);
+  ryg_buf[0] = this->_R_time;
+  ryg_buf[1] = this->_Y_time;
+  ryg_buf[2] = this->_G_time;
+  writeReg(0x0B, ryg_buf, sizeof(ryg_buf));
 }
 
 void DFRobot_TRAFFICLIGHT::changeDefaultRYGTime(uint8_t R_time, uint8_t Y_time, uint8_t G_time)
 {
-  uint8_t buf[10] = {0};
-  buf[0] = LIGHT_CHANGE_DEFAULT_LIGHT;
-  buf[1] = R_time;
-  buf[2] = Y_time;
-  buf[3] = G_time;
-  sProtocol_t _protocol = pack(buf, sizeof(buf));
-  writeReg(0x00, (uint8_t *)&_protocol, sizeof(_protocol));
-  uint8_t rbuf[12];
-  readReg(0x00, rbuf, sizeof(rbuf));
-  // for(int i =0;i<12;i++)
-  //   DBG(rbuf[i]);
-  delay(500);
+  uint8_t default_mark = 1;
+  writeReg(0x13, &default_mark, 1);
+  delay(100);
+  uint8_t buf[3] = {0};
+  buf[0] = R_time;
+  buf[1] = Y_time;
+  buf[2] = G_time;
+  writeReg(0x14, buf, sizeof(buf));
 }
 
 void DFRobot_TRAFFICLIGHT::clearSchedule()
 {
-  uint8_t buf[10] = {0};
-  buf[0] = LIGHT_CLEAR_SCHEDULE;
-  sProtocol_t _protocol = pack(buf, sizeof(buf));
-  writeReg(0x00, (uint8_t *)&_protocol, sizeof(_protocol));
-  uint8_t rbuf[12];
-  readReg(0x00, rbuf, sizeof(rbuf));
-  delay(500);
+  uint8_t clear_mark = 1;
+  writeReg(0x11, &clear_mark, 1);
 }
 
 bool DFRobot_TRAFFICLIGHT::ifLightIsOn(uint8_t light)
 {
-  String activelight;
-  uint8_t buf[10] = {0};
-  buf[0] = LIGHT_GET_WHITCH_LIGHT_IS_ON;
-  sProtocol_t _protocol = pack(buf, sizeof(buf));
-  writeReg(0x00, (uint8_t *)&_protocol, sizeof(_protocol));
-  uint8_t rbuf[12];
-  readReg(0x00, rbuf, sizeof(rbuf));
-  if (light == rbuf[2])
+  uint8_t now_light;
+  readReg(0x12, &now_light,1);
+  if (light == now_light)
     return 1;
   else 
     return 0;

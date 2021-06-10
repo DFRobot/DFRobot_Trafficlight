@@ -34,6 +34,10 @@ void setup() {
  */
   TRAFFICLIGHT.clearSchedule();
   TRAFFICLIGHT.setBeginTime(/*时*/0,/*分*/0,/*秒*/20);
+/*!
+ *  @param 范围：1~99
+ *         单位：秒
+ */
   TRAFFICLIGHT.setRYGLightTime(/*红灯持续时间*/1,/*黄灯持续时间*/0,/*绿灯持续时间*/0);
   TRAFFICLIGHT.sendMessageToMCU();
 
@@ -41,6 +45,10 @@ void setup() {
  *  @brief 设置从0时0分40开始，持续亮黄灯
  */  
   TRAFFICLIGHT.setBeginTime(/*时*/0,/*分*/0,/*秒*/40);
+/*!
+ *  @param 范围：1~99
+ *         单位：秒
+ */
   TRAFFICLIGHT.setRYGLightTime(/*红灯持续时间*/0,/*黄灯持续时间*/1,/*绿灯持续时间*/0);
   TRAFFICLIGHT.sendMessageToMCU(); 
 
@@ -48,6 +56,10 @@ void setup() {
  *  @brief 设置从1时0分0开始，持续亮绿灯
  */  
   TRAFFICLIGHT.setBeginTime(/*时*/0,/*分*/1,/*秒*/0);
+/*!
+ *  @param 范围：1~99
+ *         单位：秒
+ */
   TRAFFICLIGHT.setRYGLightTime(/*红灯持续时间*/0,/*黄灯持续时间*/0,/*绿灯持续时间*/1);
   TRAFFICLIGHT.sendMessageToMCU();
 
@@ -55,6 +67,10 @@ void setup() {
  *  @brief 设置从0时1分20开始，红灯亮6秒，黄灯亮5秒，绿灯亮4秒
  */  
   TRAFFICLIGHT.setBeginTime(/*时*/0,/*分*/1,/*秒*/20);
+/*!
+ *  @param 范围：1~99
+ *         单位：秒
+ */
   TRAFFICLIGHT.setRYGLightTime(/*红灯持续时间*/6,/*黄灯持续时间*/5,/*绿灯持续时间*/4);
   TRAFFICLIGHT.sendMessageToMCU();
   

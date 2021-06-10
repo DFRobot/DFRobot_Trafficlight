@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*
 '''
   * @file  getstatus.ino
-    @n i2c µØÖ·Ñ¡Ôñ£¬Ä¬ÈÏi2cµØÖ·Îª0x57£¬A1¡¢A0×éºÏ³É4ÖÖIICµØÖ·
+    @n i2c åœ°å€é€‰æ‹©ï¼Œé»˜è®¤i2cåœ°å€ä¸º0x57ï¼ŒA1ã€A0ç»„åˆæˆ4ç§IICåœ°å€
                 | A1 | A0 |
                 | 0  | 0  |    0x54
                 | 0  | 1  |    0x55
                 | 1  | 0  |    0x56
                 | 1  | 1  |    0x57   default i2c address  
-  * @n ÊµÑéÏÖÏó£º  ÉèÖÃ´ËÊ±µÆµÄ×´Ì¬
+  * @n å®éªŒç°è±¡ï¼š  è®¾ç½®æ­¤æ—¶ç¯çš„çŠ¶æ€
   * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
   * @licence     The MIT License (MIT)
   * @author      PengKaixing(kaixing.peng@dfrobot.com)
@@ -23,8 +23,8 @@ import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 from dfrobot_trafficlight import *
 
-I2C_1       = 0x01               # I2C_1 Ê¹ÓÃi2c1½Ó¿ÚÇı¶¯´«¸ĞÆ÷£¬ ¿ÉÒÔµ÷ÕûÎªi2c0µ«ÊÇĞèÒªÅäÖÃÊ÷İ®ÅÉµÄÎÄ¼ş
-I2C_ADDRESS = 0x54               # I2C Éè±¸µÄµØÖ·£¬¿ÉÒÔ¸ü¸ÄA1¡¢A0À´¸ü»»µØÖ·£¬Ä¬ÈÏµØÖ·Îª0x54
+I2C_1       = 0x01               # I2C_1 ä½¿ç”¨i2c1æ¥å£é©±åŠ¨ä¼ æ„Ÿå™¨ï¼Œ å¯ä»¥è°ƒæ•´ä¸ºi2c0ä½†æ˜¯éœ€è¦é…ç½®æ ‘è“æ´¾çš„æ–‡ä»¶
+I2C_ADDRESS = 0x55               # I2C è®¾å¤‡çš„åœ°å€ï¼Œå¯ä»¥æ›´æ”¹A1ã€A0æ¥æ›´æ¢åœ°å€ï¼Œé»˜è®¤åœ°å€ä¸º0x54
 trafficlight = dfrobot_trafficlight_I2C(I2C_1 ,I2C_ADDRESS)
 
 def setup():

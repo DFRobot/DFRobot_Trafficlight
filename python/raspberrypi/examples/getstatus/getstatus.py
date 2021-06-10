@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*
 '''
-  * @file  getstatus.ino
-    @n i2c µØÖ·Ñ¡Ôñ£¬Ä¬ÈÏi2cµØÖ·Îª0x57£¬A1¡¢A0×éºÏ³É4ÖÖIICµØÖ·
+  * @file  getstatus.py
+    @n i2c åœ°å€é€‰æ‹©ï¼Œé»˜è®¤i2cåœ°å€ä¸º0x57ï¼ŒA1ã€A0ç»„åˆæˆ4ç§IICåœ°å€
                 | A1 | A0 |
                 | 0  | 0  |    0x54
                 | 0  | 1  |    0x55
                 | 1  | 0  |    0x56
                 | 1  | 1  |    0x57   default i2c address  
-  * @n ÊµÑéÏÖÏó£º  »ñÈ¡´ËÊ±µÆµÄ×´Ì¬
+  * @n å®éªŒç°è±¡ï¼š  è·å–æ­¤æ—¶ç¯çš„çŠ¶æ€
   * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
   * @licence     The MIT License (MIT)
   * @author      PengKaixing(kaixing.peng@dfrobot.com)
@@ -21,30 +21,42 @@ import os
 import time
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
-from dfrobot_rafficlight import *
+from dfrobot_trafficlight import *
 
-I2C_1       = 0x01               # I2C_1 Ê¹ÓÃi2c1½Ó¿ÚÇı¶¯´«¸ĞÆ÷£¬ ¿ÉÒÔµ÷ÕûÎªi2c0µ«ÊÇĞèÒªÅäÖÃÊ÷İ®ÅÉµÄÎÄ¼ş
-I2C_ADDRESS = 0x54               # I2C Éè±¸µÄµØÖ·£¬¿ÉÒÔ¸ü¸ÄA1¡¢A0À´¸ü»»µØÖ·£¬Ä¬ÈÏµØÖ·Îª0x54
+I2C_1       = 0x01               # I2C_1 ä½¿ç”¨i2c1æ¥å£é©±åŠ¨ä¼ æ„Ÿå™¨ï¼Œ å¯ä»¥è°ƒæ•´ä¸ºi2c0ä½†æ˜¯éœ€è¦é…ç½®æ ‘è“æ´¾çš„æ–‡ä»¶
+I2C_ADDRESS = 0x55               # I2C è®¾å¤‡çš„åœ°å€ï¼Œå¯ä»¥æ›´æ”¹A1ã€A0æ¥æ›´æ¢åœ°å€ï¼Œé»˜è®¤åœ°å€ä¸º0x54
 trafficlight = dfrobot_trafficlight_I2C(I2C_1 ,I2C_ADDRESS)
 
-active_light = 0
 
 def setup():
- trafficlight.clear_schedule()
- trafficlight.set_begin_time(0,0,20)
- trafficlight.set_RYG_light_time(1,0,0)
- trafficlight.send_message_to_MCU()
- trafficlight.update_module_time(0,0,0)
+  '''
+   *  @brief ä¿®æ”¹äº¤é€šç¯é»˜è®¤æŒç»­å€¼
+   *  @param å‚æ•°1ï¼šçº¢ç¯æŒç»­æ—¶é—´ å‚æ•°2ï¼šé»„ç¯æŒç»­æ—¶é—´  å‚æ•°3ï¼šç»¿ç¯æŒç»­æ—¶é—´
+             èŒƒå›´ï¼š1~99
+   *         å•ä½ï¼šç§’
+   '''
+  trafficlight.change_default_RYG_time(11,3,11)
+  
+  '''
+   *  @brief è®¾ç½®ä»0æ—¶1åˆ†0å¼€å§‹ï¼ŒæŒç»­äº®çº¢ç¯
+   *  @param èŒƒå›´ï¼š1~99
+   *         å•ä½ï¼šç§’
+   '''
+  trafficlight.clear_schedule()
+  trafficlight.set_begin_time(0,0,20)
+  trafficlight.set_RYG_light_time(1,0,0)
+  trafficlight.send_message_to_MCU()
+  trafficlight.update_module_time(0,0,0)
 def loop():
-  global active_light
-  if(active_light != trafficlight.get_whitch_light_is_on()):
-    active_light = trafficlight.get_whitch_light_is_on()
-    if active_light == 0:
-      print "red_light"
-    elif active_light == 1:
-      print "yellow_light"
-    elif active_light == 2:
-      print "green_light"
+  '''
+   *  @param RED_LIGHT    
+   *         YELLOW_LIGHT 
+   *         GREEN_LIGHT 
+   '''
+  if (1 == trafficlight.if_light_is_on(trafficlight.RED_LIGHT)):
+    print("light is on!")
+  else:
+    print("light is off!")
   time.sleep(1) 
 
 if __name__ == "__main__":

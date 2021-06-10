@@ -5,7 +5,8 @@
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
-DFRobot_Trafficlight_I2C            KEYWORD1
+DFRobot_Trafficlight_I2C   KEYWORD1
+TRAFFICLIGHT    KEYWORD1
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
